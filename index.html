@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>타이둥 Heal in One | 대자연이 선사하는 전용 힐링 제안</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&family=Noto+Sans+KR:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --nature-bg: #F0F4F8;
+            --forest-green: #2D6A4F;
+            --ocean-blue: #0077B6;
+            --sun-orange: #FB8500;
+            --text-main: #1A1A1A;
+        }
+        body {
+            font-family: 'Montserrat', 'Noto Sans KR', sans-serif;
+            background-color: var(--nature-bg);
+            color: var(--text-main);
+            scroll-behavior: smooth;
+        }
+        .hero-gradient {
+            background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('https://images.unsplash.com/photo-1552074284-5e88ef1aef18?q=80&w=2000&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container { height: 350px; }
+        }
+        .card-shadow { box-shadow: 0 20px 50px -12px rgba(45,106,79,0.2); }
+        .active-yt-btn { border-color: var(--forest-green) !important; background-color: white; transform: scale(1.1); box-shadow: 0 15px 30px rgba(45,106,79,0.3); }
+        .active-yt-btn img { border: 3px solid var(--forest-green); }
+        .img-zoom { overflow: hidden; border-radius: 2rem; }
+        .img-zoom img { transition: transform 0.5s ease; }
+        .img-zoom:hover img { transform: scale(1.1); }
+        .itinerary-detail strong { color: var(--forest-green); display: block; margin-top: 1.5rem; margin-bottom: 0.25rem; font-size: 1.2rem; font-weight: 700; }
+        .itinerary-detail em { display: block; font-style: normal; font-size: 0.9rem; color: var(--ocean-blue); font-weight: 500; margin-bottom: 0.5rem; }
+        .platform-badge { background: var(--sun-orange); color: white; padding: 4px 12px; border-radius: 99px; font-size: 12px; font-weight: bold; margin-bottom: 12px; display: inline-block; }
+    </style>
+</head>
+<body class="overflow-x-hidden">
+
+    <!-- Chosen Palette: Saturated Deep Nature (고포화 숲의 초록, 태평양 블루, 앰버 오렌지 - 강렬한 대자연의 생명력) -->
+    
+    <!-- Application Structure Plan: 
+         한국인 여행객을 위한 올인원 랜딩 페이지.
+         1. 비주얼: 고포화 색상을 사용하여 타이둥의 활기찬 에너지를 강조.
+         2. 퀴즈: '힐링 유형' 진단을 통해 개인화된 경험 제공.
+         3. 인플루언서: 4인의 유튜버를 통해 신뢰도 높은 코스 정보 전달.
+         4. 예약 촉진: 전용 프로모션 코드를 동적으로 노출하여 실제 예약 전환 유도.
+    -->
+
+    <!-- Visualization & Content Choices: 
+         1. Radar Chart (Chart.js): 각 코스의 활동성, 힐링도 등을 고대조 색상으로 표현.
+         2. JS Dynamic Update: 유튜버 선택 시 혜택과 할인 코드를 실시간으로 변경.
+         3. UI Pattern: 한국 Gen Z가 선호하는 카드 레이아웃과 굵은 타이포그래피.
+         CONFIRMATION: NO SVG used. NO Mermaid JS used.
+    -->
+
+    <nav class="fixed w-full z-50 bg-white/80 backdrop-blur-xl border-b border-stone-200 p-5">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="text-2xl font-black tracking-tighter flex items-center text-[#2D6A4F]">
+                TAITUNG <span class="font-light text-stone-400 ml-2 italic">Heal in One</span>
+            </div>
+            <div class="hidden md:flex space-x-12 text-sm font-bold uppercase tracking-widest">
+                <a href="#quiz" class="hover:text-[#0077B6] transition">힐링 테스트</a>
+                <a href="#explore" class="hover:text-[#0077B6] transition">코스 탐색</a>
+                <a href="#booking" class="hover:text-[#0077B6] transition">지금 예약</a>
+            </div>
+            <button onclick="document.getElementById('booking').scrollIntoView()" class="bg-[#FB8500] text-white px-8 py-3 rounded-full text-sm font-black hover:bg-orange-600 transition shadow-xl">예약하기</button>
+        </div>
+    </nav>
+
+    <header class="h-[90vh] flex flex-col justify-center items-center text-center px-4 hero-gradient relative text-white">
+        <div class="z-10 mt-10">
+            <span class="text-sm font-bold tracking-[0.4em] text-[#FB8500] uppercase mb-6 block">Embrace the Flow</span>
+            <h1 class="text-6xl md:text-9xl font-black mb-8 leading-tight drop-shadow-2xl italic">Taitung, heal in one</h1>
+            <p class="text-xl md:text-3xl max-w-3xl mx-auto mb-12 font-light tracking-wide leading-relaxed">
+                당신만의 흐름을 찾고, 영혼을 치유하세요. <br><span class="font-bold">자연이 선사하는 가장 완벽한 쉼표.</span>
+            </p>
+            <div class="flex flex-col md:flex-row gap-6 justify-center">
+                <a href="#quiz" class="bg-white text-[#2D6A4F] px-12 py-5 rounded-full text-lg font-black tracking-tight hover:bg-stone-100 transition shadow-2xl">나의 힐링 타입 찾기</a>
+                <a href="#explore" class="border-2 border-white text-white px-12 py-5 rounded-full text-lg font-black tracking-tight hover:bg-white hover:text-[#2D6A4F] transition">유튜버 코스 보기</a>
+            </div>
+        </div>
+        <div class="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce">
+            <span class="text-3xl">↓</span>
+        </div>
+    </header>
+
+    <section id="quiz" class="py-32 bg-white px-6">
+        <div class="max-w-5xl mx-auto text-center">
+            <div class="mb-20">
+                <h2 class="text-5xl font-black mb-6 text-[#2D6A4F]">대자연 진단실</h2>
+                <p class="text-xl text-stone-500 font-medium">눈을 감았을 때, 당신이 가장 갈망하는 타이둥의 에너지는?</p>
+            </div>
+            <div id="quiz-box" class="max-w-3xl mx-auto p-12 md:p-20 bg-[#F0F4F8] rounded-[4rem] card-shadow border-4 border-white">
+                <div id="q1">
+                    <h3 class="text-2xl font-bold mb-12 text-[#1A1A1A]">Q1. 이상적인 주말 아침, 당신을 깨우는 것은?</h3>
+                    <div class="grid gap-6">
+                        <button onclick="nextQuestion(1, 'dynamic')" class="p-8 bg-white border-2 border-stone-100 rounded-3xl hover:border-[#0077B6] hover:text-[#0077B6] transition text-left px-10 flex justify-between items-center group shadow-sm">
+                            <span class="text-lg font-bold">파도 소리에 잠을 깨어, 바로 바다로 뛰어들고 싶다.</span>
+                            <span class="text-2xl opacity-0 group-hover:opacity-100 transition">🌊</span>
+                        </button>
+                        <button onclick="nextQuestion(1, 'slow')" class="p-8 bg-white border-2 border-stone-100 rounded-3xl hover:border-[#0077B6] hover:text-[#0077B6] transition text-left px-10 flex justify-between items-center group shadow-sm">
+                            <span class="text-lg font-bold">숲속 오두막에서 나무와 안개의 향기를 맡으며 깨고 싶다.</span>
+                            <span class="text-2xl opacity-0 group-hover:opacity-100 transition">🌲</span>
+                        </button>
+                        <button onclick="nextQuestion(1, 'art')" class="p-8 bg-white border-2 border-stone-100 rounded-3xl hover:border-[#0077B6] hover:text-[#0077B6] transition text-left px-10 flex justify-between items-center group shadow-sm">
+                            <span class="text-lg font-bold">역사가 느껴지는 골목을 거닐며 조용한 서점을 찾고 싶다.</span>
+                            <span class="text-2xl opacity-0 group-hover:opacity-100 transition">📚</span>
+                        </button>
+                        <button onclick="nextQuestion(1, 'social')" class="p-8 bg-white border-2 border-stone-100 rounded-3xl hover:border-[#0077B6] hover:text-[#0077B6] transition text-left px-10 flex justify-between items-center group shadow-sm">
+                            <span class="text-lg font-bold">친구들과 잔디밭에서 피크닉을 즐기며 축제를 맞이하고 싶다.</span>
+                            <span class="text-2xl opacity-0 group-hover:opacity-100 transition">🎉</span>
+                        </button>
+                    </div>
+                </div>
+                <div id="quiz-result" class="hidden">
+                    <div class="text-8xl mb-10" id="res-emoji">🌿</div>
+                    <h3 class="text-4xl font-black mb-8 text-[#2D6A4F]" id="res-title"></h3>
+                    <p class="text-xl text-stone-600 mb-12 leading-relaxed font-medium" id="res-desc"></p>
+                    <button onclick="document.getElementById('explore').scrollIntoView()" class="bg-[#2D6A4F] text-white px-16 py-5 rounded-full text-lg font-black shadow-2xl hover:bg-green-900 transition">추천 코스 확인하기</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="explore" class="py-32 px-6 max-w-7xl mx-auto">
+        <div class="text-center mb-24">
+            <h2 class="text-5xl font-black mb-6 text-[#2D6A4F]">유튜버 리얼 가이드</h2>
+            <p class="text-xl text-stone-500 font-medium">크리에이터를 선택하여 타이둥의 4가지 색깔을 탐험해보세요.</p>
+        </div>
+        <div class="flex flex-wrap justify-center gap-10 md:gap-16 mb-24">
+            <button onclick="showYouTuber('korean-jay')" id="btn-korean-jay" class="nav-btn flex flex-col items-center group transition-all duration-300 p-4 rounded-[2rem] border-4 border-transparent">
+                <div class="w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden mb-5 border-4 border-white shadow-lg group-hover:border-[#2D6A4F] transition">
+                    <img src="profile1.jpg" alt="w-full h-full object-cover" alt="Korean Jay">
+                </div>
+                <span class="text-sm font-black tracking-widest text-[#2D6A4F]">Korean Jay</span>
+            </button>
+            <button onclick="showYouTuber('sueddu')" id="btn-sueddu" class="nav-btn flex flex-col items-center group transition-all duration-300 p-4 rounded-[2rem] border-4 border-transparent">
+                <div class="w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden mb-5 border-4 border-white shadow-lg group-hover:border-[#2D6A4F] transition">
+                    <img src="profile2.jpg" alt="w-full h-full object-cover" alt="Sueddu">
+                </div>
+                <span class="text-sm font-black tracking-widest text-[#2D6A4F]">Sueddu</span>
+            </button>
+            <button onclick="showYouTuber('onuk')" id="btn-onuk" class="nav-btn flex flex-col items-center group transition-all duration-300 p-4 rounded-[2rem] border-4 border-transparent">
+                <div class="w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden mb-5 border-4 border-white shadow-lg group-hover:border-[#2D6A4F] transition">
+                    <img src="profile3.jpg" alt="w-full h-full object-cover" alt="Onuk">
+                </div>
+                <span class="text-sm font-black tracking-widest text-[#2D6A4F]">Onuk</span>
+            </button>
+            <button onclick="showYouTuber('jenny-park')" id="btn-jenny-park" class="nav-btn flex flex-col items-center group transition-all duration-300 p-4 rounded-[2rem] border-4 border-transparent">
+                <div class="w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden mb-5 border-4 border-white shadow-lg group-hover:border-[#2D6A4F] transition">
+                    <img src="profile4.jpg" alt="w-full h-full object-cover" alt="Jenny Park">
+                </div>
+                <span class="text-sm font-black tracking-widest text-[#2D6A4F]">Jenny Park</span>
+            </button>
+        </div>
+        
+        <div id="yt-content" class="grid lg:grid-cols-2 gap-20 items-start">
+            <div class="grid grid-cols-2 gap-6">
+                <div class="img-zoom h-72 shadow-xl border-4 border-white"><img id="yt-img-1" src="" class="w-full h-full object-cover"></div>
+                <div class="img-zoom h-72 shadow-xl border-4 border-white mt-12"><img id="yt-img-2" src="" class="w-full h-full object-cover"></div>
+                <div class="img-zoom h-72 shadow-xl border-4 border-white -mt-12"><img id="yt-img-3" src="" class="w-full h-full object-cover"></div>
+                <div class="img-zoom h-72 shadow-xl border-4 border-white"><img id="yt-img-4" src="" class="w-full h-full object-cover"></div>
+            </div>
+            <div class="space-y-12">
+                <div class="bg-white p-12 rounded-[4rem] card-shadow border-2 border-stone-50">
+                    <div class="flex items-center gap-6 mb-10">
+                        <img id="yt-avatar" src="" class="w-20 h-20 rounded-full object-cover border-4 border-[#F0F4F8]" alt="Avatar">
+                        <div>
+                            <span id="yt-tag" class="text-sm font-black text-[#0077B6] tracking-widest uppercase block mb-1">Heal type</span>
+                            <h3 id="yt-title" class="text-4xl font-black text-[#1A1A1A]">코스 정보</h3>
+                        </div>
+                    </div>
+                    <div id="yt-description" class="text-stone-600 text-lg leading-relaxed mb-10 itinerary-detail"></div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-10 border-t border-stone-100 pt-10">
+                        <div>
+                            <h4 class="text-xs font-black text-stone-400 uppercase tracking-widest mb-6 italic">Healing Analysis</h4>
+                            <div class="chart-container"><canvas id="healingChart"></canvas></div>
+                        </div>
+                        <div>
+                            <h4 class="text-xs font-black text-stone-400 uppercase tracking-widest mb-6 italic">Itinerary Highlights</h4>
+                            <ul id="yt-spots" class="text-lg space-y-4 font-bold text-[#1A1A1A]"></ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-[#2D6A4F] text-white p-12 rounded-[4rem] relative overflow-hidden shadow-2xl">
+                    <h4 class="text-xs font-black text-[#FB8500] tracking-widest uppercase mb-4">Marketing Insight</h4>
+                    <p id="yt-insight" class="text-lg leading-relaxed text-stone-100 relative z-10 font-medium"></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="booking" class="py-32 bg-[#2D6A4F] px-6 relative overflow-hidden">
+        <div class="max-w-5xl mx-auto text-center relative z-10">
+            <h2 class="text-5xl md:text-7xl font-black mb-8 text-white">이번엔 자연이 당신을 치유할 차례입니다</h2>
+            <p class="text-2xl text-green-100 mb-16 font-light">지금 바로 유튜버 패키지를 예약하고, 당신만을 위한 힐링 여행을 떠나보세요!</p>
+            <div class="grid md:grid-cols-2 gap-10 text-left">
+                <!-- Dynamic Booking Card -->
+                <div class="p-12 bg-white rounded-[3.5rem] shadow-2xl group hover:scale-[1.02] transition-all duration-500">
+                    <div class="platform-badge" id="booking-platform">KLOOK 단독</div>
+                    <h4 class="font-black text-3xl mb-4 text-[#1A1A1A]" id="booking-title">전용 패키지</h4>
+                    <p class="text-lg text-stone-500 mb-10 leading-relaxed" id="booking-desc">현지 픽업, 체험 프로그램, 2박 엄선 숙소가 포함되어 있습니다.</p>
+                    <div class="flex items-center justify-between mb-10">
+                        <span class="text-sm font-black uppercase tracking-widest text-stone-400">Starting From</span>
+                        <span class="text-4xl font-black text-[#2D6A4F]" id="booking-price">₩ 250,000</span>
+                    </div>
+                    <a id="booking-link" href="#" target="_blank" class="block w-full text-center py-6 bg-[#FB8500] text-white font-black rounded-3xl hover:bg-orange-600 transition shadow-xl text-xl tracking-tight">패키지 예약하러 가기</a>
+                </div>
+                <!-- Promo Code Card -->
+                <div class="p-12 bg-[#0077B6] rounded-[3.5rem] shadow-2xl group hover:scale-[1.02] transition-all duration-500 text-white border-4 border-white/20">
+                    <h4 class="font-black text-3xl mb-4">2026 한국 여행객 혜택</h4>
+                    <p class="text-lg text-blue-100 mb-10 leading-relaxed" id="promo-offer-text">예약 시 크리에이터 전용 코드를 입력하여 추가 할인과 선물을 받으세요.</p>
+                    <div class="bg-white/10 p-6 rounded-3xl text-center backdrop-blur-md border border-white/30">
+                        <span class="text-blue-200 text-xs font-black uppercase block mb-2 tracking-[0.3em]">PROMO CODE</span>
+                        <span class="font-mono font-black text-4xl text-white tracking-widest" id="promo-code-display">HEAL-TAITUNG</span>
+                    </div>
+                    <p class="text-sm mt-8 text-blue-200 font-bold" id="promo-terms">※ 혜택: 액티비티 할인권 및 현지 문화 체험권 증정</p>
+                </div>
+            </div>
+        </div>
+        <div class="absolute top-0 right-0 text-[20rem] font-black text-white/5 select-none leading-none -translate-y-20">HEAL</div>
+    </section>
+
+    <footer class="py-20 px-6 text-center text-stone-400 text-[12px] font-bold tracking-[0.5em] uppercase bg-white">
+        TAITUNG TOURISM BUREAU × HEAL IN ONE CAMPAIGN 2026
+    </footer>
+
+    <script>
+        const ytData = {
+            'korean-jay': {
+                name: 'Korean Jay',
+                platform: 'KLOOK 익스트림 어드벤처',
+                bookingUrl: 'https://www.klook.com/ko/city/27-taitung-things-to-do/',
+                price: '₩ 320,000',
+                avatar: 'profile1.jpg',
+                tag: 'Adventure & Ocean',
+                title: '태평양의 고동소리를 들어보세요',
+                promoCode: 'JAY-GO-TAITUNG',
+                promoOffer: 'Korean Jay 어드벤처 패키지 예약 시 ₩20,000 즉시 할인 및 스포츠 방수백 증정.',
+                promoTerms: '※ 포함: 녹도 왕복 승선권 및 다이빙 보험 제공',
+                desc: `
+                    <p>Korean Jay와 함께 한계에 도전하세요. 피로를 에너지로 바꾸는 '액티브 힐링' 여정입니다.</p>
+                    <strong>🌊 녹도 블루홀 다이빙 (Blue Cave Diving)</strong>
+                    <em>핵심 체험: 극한의 자연 탐험 × 수중 감각 충격</em>
+                    <strong>♨️ 리송 온천 (Lisong Hot Spring)</strong>
+                    <em>핵심 체험: 신체적 도전 × 야생 계곡의 회복력</em>
+                    <strong>🌅 두란 일출 서핑 (Dulan Sunrise Surf)</strong>
+                    <em>핵심 체험: 자연의 리듬과 동기화 × 새벽의 재시작</em>
+                `,
+                imgs: ['p11.jpeg','p12.jpg','p13.jpeg','p14.jpg'],
+                spots: ['🌊 녹도 블루홀 탐험', '🏔 리송 야생 온천', '🏄‍♂️ 두란 일출 서핑', '🍽 원주민 와일드 다이닝'],
+                insight: '한국 MZ세대의 "에너지 전환" 심리를 공략. 강도 높은 신체 활동을 통해 깊은 정신적 정화를 이끌어냅니다.',
+                chart: [98, 95, 80, 40, 30]
+            },
+            'sueddu': {
+                name: 'Sueddu',
+                platform: 'KKday 감성 슬로우 라이프',
+                bookingUrl: 'https://www.kkday.com/ko/city/taitung',
+                price: '₩ 260,000',
+                avatar: 'profile2.jpg',
+                tag: 'Forest & Slow Living',
+                title: '초록빛 정적 속으로의 침잠',
+                promoCode: 'SUEDDU-SLOW-LIFE',
+                promoOffer: 'Sueddu 슬로우 라이프 코스 예약 시 객실 업그레이드 및 수제 애프터눈 티 세트 제공.',
+                promoTerms: '※ 포함: 치상 자전거 대여 및 난주후 부족 가이드 투어',
+                desc: `
+                    <p>Sueddu의 느린 걸음을 따라가 보세요. '느림'을 연습하고 몸과 마음의 상태를 재정비하는 시간입니다.</p>
+                    <strong>🚲 치상 백랑대로 자전거 (Cycling)</strong>
+                    <em>핵심 체험: 전원 풍경 자전거 투어 × 시각적 개방감</em>
+                    <strong>🌲 즈번 국립산림공원 (Forest Bathing)</strong>
+                    <em>핵심 체험: 산림욕 힐링 × 오감 몰입 체험</em>
+                    <strong>🏡 난주후 부족 마을 (Indigenous Community)</strong>
+                    <em>핵심 체험: 원주민 문화 공감 × 생활 리듬의 전환</em>
+                `,
+                imgs: ['p21.jpeg','p22.jpeg','p25.jpg','p24.webp'],
+                spots: ['🚲 치상 자전거 산책', '🌲 즈번 몰입형 산림욕', '🧘‍♀️ 난주후 문화 공감', '🍵 루예 고지 티타임'],
+                insight: '힐링 경제(Healing Economy) 타겟. "쉼"과 "숲캉스"를 추구하는 고객군에게 무자극 시각 체험과 감속 생활의 가치를 전달합니다.',
+                chart: [20, 30, 98, 85, 20]
+            },
+            'onuk': {
+                name: 'Onuk',
+                platform: 'KLOOK 미학 큐레이션',
+                bookingUrl: 'https://www.klook.com/ko/city/27-taitung-things-to-do/',
+                price: '₩ 290,000',
+                avatar: 'profile3.jpg',
+                tag: 'Aesthetic & Culture',
+                title: '예술과 미감의 채집',
+                promoCode: 'ONUK-VISUAL-HEAL',
+                promoOffer: 'Onuk 감성 루트 예약 시 유명 카페 15% 할인 및 한정판 굿즈 세트 증정.',
+                promoTerms: '※ 포함: 티에화촌 마켓 바우처 및 두란 설탕공장 입장권',
+                desc: `
+                    <p>Onuk의 타이둥은 감각의 성찬입니다. 온기가 깃든 로컬 공간에서 타이둥만의 색채를 채집하세요.</p>
+                    <strong>🎶 티에화촌 음악마을 (Tiehua Village)</strong>
+                    <em>핵심 체험: 라이브 공연 감상 × 문창 마켓 산책</em>
+                    <strong>🏭 두란 설탕공장 문창단지 (Dulan Factory)</strong>
+                    <em>핵심 체험: 산업 유산의 미학 × 예술인 마을 탐방</em>
+                    <strong>🌊 코코나 카페 (Coco n a Café)</strong>
+                    <em>핵심 체험: 오션뷰 물멍 힐링 × 자연 경관 몰입</em>
+                `,
+                imgs: ['p31.jpg','p32.jpg','p33.jpg','p34.jpg'],
+                spots: ['🏠 티에화촌 음악 빌리지', '🐚 두란 설탕공장 예술단지', '☕️ 코코나 뷰 카페', '📸 난후이 예술 설치물'],
+                insight: '시각적 힐링(Visual Healing). 인스타그램에서 "인생 사진"을 공유하고자 하는 욕구를 충족시켜 브랜드 확산력을 높입니다.',
+                chart: [30, 50, 65, 95, 60]
+            },
+            'jenny-park': {
+                name: 'Jenny Park',
+                platform: 'KKday 페스티벌 패키지',
+                bookingUrl: 'https://www.kkday.com/ko/city/taitung',
+                price: '₩ 220,000',
+                avatar: 'profile4.jpg',
+                tag: 'Festival & Connection',
+                title: '대지의 축제에 참여하세요',
+                promoCode: 'JENNY-PARTY-TIME',
+                promoOffer: 'Jenny Park 축제 패키지 예약 시 열기구 패스트트랙 및 야시장 먹거리 쿠폰 증정.',
+                promoTerms: '※ 포함: 타이둥 야시장 미식 지도 및 지정 식당 할인',
+                desc: `
+                    <p>Jenny Park과 함께 타이둥의 정을 느껴보세요. 집단적인 활기 속에서 불안을 해소하는 가장 빠른 방법입니다.</p>
+                    <strong>🎈 타이둥 열기구 페스티벌 (Balloon Fest)</strong>
+                    <em>핵심 체험: 하늘 위의 비주얼 축제 × 집단적 해방감</em>
+                    <strong>🪶 원주민 부족 축제 (Tribal Festival)</strong>
+                    <em>핵심 체험: 문화 의식 몰입 × 원주민 생활 체험</em>
+                    <strong>🎤 마켓 음악 이벤트 (Market & Live)</strong>
+                    <em>핵심 체험: 음악과 소통의 장 × 로컬 마켓 교류</em>
+                `,
+                imgs: ['p41.avif','p42.jpg','p44.jpeg','p45.jpg'],
+                spots: ['🎈 국제 열기구 페스티벌', '🎤 부족 제례 문화 체험', '🎸 티에화촌 음악 마켓', '🍢 로컬 야시장 투어'],
+                insight: '사회적 연결(Social Connection). 타인과의 교감과 축제 활동에서 발생하는 도파민을 통해 스트레스를 해소하는 유형입니다.',
+                chart: [50, 92, 55, 60, 95]
+            }
+        };
+
+        let myChart;
+        function initChart(data) {
+            const ctx = document.getElementById('healingChart').getContext('2d');
+            if (myChart) myChart.destroy();
+            myChart = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: ['도전도', '활기', '자연도', '미학', '소통'],
+                    datasets: [{
+                        data: data,
+                        backgroundColor: 'rgba(0, 119, 182, 0.2)',
+                        borderColor: '#0077B6',
+                        pointBackgroundColor: '#FB8500',
+                        borderWidth: 3
+                    }]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    scales: { r: { suggestedMin: 0, suggestedMax: 100, ticks: { display: false }, grid: { color: 'rgba(0,0,0,0.05)' } } },
+                    plugins: { legend: { display: false } }
+                }
+            });
+        }
+
+        function showYouTuber(key) {
+            const data = ytData[key];
+            document.getElementById('yt-avatar').src = data.avatar;
+            document.getElementById('yt-tag').innerText = data.tag;
+            document.getElementById('yt-title').innerText = data.title;
+            document.getElementById('yt-description').innerHTML = data.desc;
+            document.getElementById('yt-insight').innerText = data.insight;
+            document.getElementById('yt-img-1').src = data.imgs[0];
+            document.getElementById('yt-img-2').src = data.imgs[1];
+            document.getElementById('yt-img-3').src = data.imgs[2];
+            document.getElementById('yt-img-4').src = data.imgs[3];
+            document.getElementById('yt-spots').innerHTML = data.spots.map(s => `<li>${s}</li>`).join('');
+            
+            document.getElementById('booking-platform').innerText = data.platform;
+            document.getElementById('booking-title').innerText = `${data.name}의 힐링 패키지`;
+            document.getElementById('booking-desc').innerText = `${data.name}의 영상에 등장한 모든 명소와 전용 픽업 서비스가 포함된 올인원 일정입니다.`;
+            document.getElementById('booking-price').innerText = data.price;
+            document.getElementById('booking-link').href = data.bookingUrl;
+            
+            document.getElementById('promo-offer-text').innerText = data.promoOffer;
+            document.getElementById('promo-code-display').innerText = data.promoCode;
+            document.getElementById('promo-terms').innerText = data.promoTerms;
+            
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active-yt-btn'));
+            const activeBtn = document.getElementById(`btn-${key}`);
+            if(activeBtn) activeBtn.classList.add('active-yt-btn');
+            
+            initChart(data.chart);
+        }
+
+        function nextQuestion(qNum, type) {
+            document.getElementById(`q${qNum}`).classList.add('hidden');
+            const resultDiv = document.getElementById('quiz-result');
+            resultDiv.classList.remove('hidden');
+            let resTitle = "", resDesc = "", resEmoji = "", targetYT = "";
+            if(type === 'dynamic') { resTitle = "산해 탐험가"; resEmoji = "🧗‍♂️"; resDesc = "파도 속에서 살아있음을 느끼는 당신, Korean Jay가 제격입니다."; targetYT = 'korean-jay'; }
+            else if(type === 'slow') { resTitle = "숲속 사색가"; resEmoji = "🌿"; resDesc = "깊은 호흡이 필요한 당신, Sueddu의 치상 코스가 정답입니다."; targetYT = 'sueddu'; }
+            else if(type === 'art') { resTitle = "감성 예술가"; resEmoji = "🎨"; resDesc = "온기 있는 공간을 사랑하는 당신, Onuk의 미학을 경험해보세요."; targetYT = 'onuk'; }
+            else { resTitle = "축제 활기형"; resEmoji = "🔥"; resDesc = "에너지를 주고받을 때 행복한 당신, Jenny Park과 함께하세요."; targetYT = 'jenny-park'; }
+            document.getElementById('res-title').innerText = "당신은 [" + resTitle + "] 타입!";
+            document.getElementById('res-desc').innerText = resDesc;
+            document.getElementById('res-emoji').innerText = resEmoji;
+            showYouTuber(targetYT);
+        }
+
+        window.onload = () => { 
+            showYouTuber('korean-jay'); 
+        };
+    </script>
+</body>
+</html>
